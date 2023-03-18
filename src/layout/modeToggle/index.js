@@ -18,16 +18,22 @@ const modeSwitcher = () => {
 };
 export const modeToggle = () => {
   return El({
-    element: 'button',
-    type: 'button',
-    className:
-      'float-right m-4 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5',
-    innerHTML: svgs.DarkIcon + svgs.LightIcon,
-    eventListener: [
-      {
-        event: 'click',
-        callback: modeSwitcher,
-      },
+    element: 'div',
+    className: 'w-full h-20 reletive',
+    children: [
+      El({
+        element: 'button',
+        type: 'button',
+        className:
+          'float-right m-4 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5',
+        innerHTML: svgs.DarkIcon + svgs.LightIcon,
+        eventListener: [
+          {
+            event: 'click',
+            callback: modeSwitcher,
+          },
+        ],
+      }),
     ],
   });
 };

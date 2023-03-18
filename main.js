@@ -3,7 +3,7 @@ import { app } from './src/App';
 import { svgs } from './src/assets/svgs/index';
 
 const wheather = document.getElementById('app');
-
+history.pushState(null, null, '/login');
 wheather.appendChild(app());
 wheather.classList.add('h-full');
 wheather.classList.add('dark:bg-slate-800');
@@ -11,7 +11,6 @@ wheather.classList.add('dark:bg-slate-800');
 if (localStorage.theme === 'dark') {
   const dark = document.getElementById('theme-toggle-dark-icon');
   const light = document.getElementById('theme-toggle-light-icon');
-  console.log(dark);
   document.documentElement.classList.add('dark');
   dark.classList.add('hidden');
   light.classList.remove('hidden');

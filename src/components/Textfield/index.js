@@ -1,32 +1,31 @@
-import { svgs } from '@/assets'
-import El from '@/library/El'
+import { svgs } from '@/assets';
+import { El } from '@/library';
 
 export const Textfield = ({
   label,
-  helperText,
+  helperText = '',
   error = false,
   ...inputProps
 }) => {
   return El({
     element: 'div',
-    className: 'flex text-gray-600 flex-col px-1',
-    child: [
+    className: 'mb-6',
+    children: [
       El({
         element: 'label',
-        className: 'text-sm mb-1 px-1',
-        child: label || '',
+        className:
+          'block mb-2 text-sm font-medium text-gray-900 dark:text-white',
+        children: label || '',
       }),
       El({
-        className: `px-1 py-3 outline-none border  rounded-md
-        ${error ? 'border-red-400' : ' border-blue-400'}
-        `,
+        className: `bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`,
         element: 'input',
         ...inputProps,
       }),
       El({
         element: 'p',
         className: 'text-xs flex gap-1 mt-2 px-1',
-        child: helperText
+        children: helperText
           ? [
               El({
                 element: 'span',
@@ -38,11 +37,11 @@ export const Textfield = ({
               El({
                 element: 'span',
                 className: `flex-1 ${error ? 'text-red-500' : 'text-gray-500'}`,
-                child: helperText,
+                children: helperText,
               }),
             ]
           : '',
       }),
     ],
-  })
-}
+  });
+};
