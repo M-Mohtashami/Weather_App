@@ -2,6 +2,7 @@ export class DB {
   BASE_URL = 'http://localhost:3000';
   endPoint;
   requestHeader;
+  options;
 
   constructor(endPoint = 'tasks') {
     this.endPoint = endPoint;
@@ -22,7 +23,10 @@ export class DB {
 
   async getDB() {
     try {
-      let response = await fetch(this.BASE_URL + '/' + this.endPoint);
+      let response = await fetch(
+        this.BASE_URL + '/' + this.endPoint,
+        this.options
+      );
       this.requestHeader = response.headers;
       console.log(response.headers.get('X-Total-Count'));
       response = await response.json();

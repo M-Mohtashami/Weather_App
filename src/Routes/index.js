@@ -1,4 +1,4 @@
-import { auth } from '@/screens';
+import { auth, home } from '@/screens';
 import { login, register } from '@/layout';
 import { El } from '@/library';
 
@@ -8,7 +8,7 @@ export const routes = () => {
   console.log(location.pathname);
   switch (location.pathname) {
     case '/':
-      return (routesEl.innerHTML = 'Welcome to Wheather App');
+      return routesEl.appendChild(home());
     case '/login':
       return routesEl.appendChild(auth(login()));
     case '/register':

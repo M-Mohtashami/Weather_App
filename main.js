@@ -3,7 +3,7 @@ import { app } from './src/App';
 import { svgs } from './src/assets/svgs/index';
 
 const wheather = document.getElementById('app');
-history.pushState(null, null, '/login');
+history.pushState(null, null, '/');
 wheather.appendChild(app());
 wheather.classList.add('h-full');
 wheather.classList.add('dark:bg-slate-800');
