@@ -2,6 +2,12 @@ import { auth, home } from '@/screens';
 import { login, register } from '@/layout';
 import { El } from '@/library';
 
+const privateRoutes = (elem, child) => {
+  return Cookies.get('weather')
+    ? elem.appendChild(child)
+    : elem.appendChild(auth(login()));
+};
+
 export const routes = () => {
   const routesEl = document.getElementById('routes') || El({ element: 'div' });
   routesEl.innerHTML = '';

@@ -1,9 +1,14 @@
 import './src/styles/index.css';
 import { app } from './src/App';
 import { svgs } from './src/assets/svgs/index';
+import Cookies from 'js-cookie';
+import { renderHome } from './src/screens/Home/index';
 
 const wheather = document.getElementById('app');
-history.pushState(null, null, '/login');
+console.log(Cookies.get('weather'));
+Cookies.get('weather')
+  ? history.pushState(null, null, '/')
+  : history.pushState(null, null, '/login');
 wheather.appendChild(app());
 wheather.classList.add('h-full');
 wheather.classList.add('dark:bg-slate-800');
@@ -21,3 +26,5 @@ if (localStorage.theme === 'dark') {
   dark.classList.remove('hidden');
   light.classList.add('hidden');
 }
+
+renderHome();

@@ -1,7 +1,7 @@
 import { Button, Textfield } from '@/components';
-import { DB } from '@/library';
-import { El } from '@/library/elem';
+import { DB, El } from '@/library';
 import { routes } from '@/Routes';
+import { modal } from '@/layout';
 
 export const register = () => {
   return El({
@@ -70,13 +70,31 @@ export const register = () => {
 
 export const registerHandler = (e) => {
   e.preventDefault();
+  const popupModal = document.getElementById('popup-modal');
   const users = new DB('users');
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData);
 
-  users.addItem(data).then(() => {
-    history.pushState(null, null, '/login');
-    routes();
+  users.getItem(formData.get('email')).then((response) => {
+    if (response === []) {
+      users.addItem(data).then(() => {
+        history.pushState(null, null, '/login');
+        routes();
+      });
+    } else {
+      popupModal.classList.remove('hidden');
+      popupModal.innerHTML = '';
+      popupModal.appendChild(
+        modal('This email is registered before, Please login', {
+          text: 'login form',
+          func: (e) => {
+            history.pushState(null, null, '/login');
+            e.target.closest('#popup-modal').classList.add('hidden');
+            routes();
+          },
+        })
+      );
+    }
   });
 };
 export const toLogin = () => {

@@ -35,10 +35,13 @@ export class DB {
       console.log(error);
     }
   }
-  async getItem(id) {
+  async getItem(email) {
     try {
       let response = await fetch(
-        this.BASE_URL + '/' + this.endPoint + `${id ? '/' + id : ''}`
+        this.BASE_URL +
+          '/' +
+          this.endPoint +
+          `${email ? '?email=' + email : ''}`
       );
       response = await response.json();
       return response;

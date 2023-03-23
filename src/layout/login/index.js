@@ -1,8 +1,9 @@
 import { Button, Textfield } from '@/components';
-import { El } from '@/library/elem';
 import { routes } from '@/Routes';
-import { DB } from '@/library';
+import { DB, El } from '@/library';
 import { modal } from '@/layout';
+import { AES } from 'crypto-js';
+import Cookies from 'js-cookie';
 
 export const login = () => {
   return El({
@@ -43,7 +44,7 @@ export const login = () => {
                 id: 'remember',
                 name: 'remember',
                 type: 'checkbox',
-                value: '',
+                value: '1',
                 className:
                   'w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800',
               }),
@@ -90,14 +91,20 @@ export const loginHandler = (e) => {
   const popupModal = document.getElementById('popup-modal');
   const users = new DB('users');
   const formData = new FormData(e.target);
-  console.log(formData.has('remember'));
+  const { email, password } = Object.fromEntries(formData);
+  const token = AES.encrypt(JSON.stringify(email), password).toString();
+  console.log(token);
   users.setEndPoint(`users?email=${formData.get('email')}`);
 
   users.getItem().then((response) => {
     console.log(response.length);
     if (response.length > 0) {
       if (response[0].password === formData.get('password')) {
+        formData.has('remember')
+          ? Cookies.set('weather', token, { expires: 7 })
+          : null;
         history.pushState(null, null, '/');
+        routes();
       } else {
         e.target.reset();
         popupModal.classList.remove('hidden');
@@ -130,8 +137,6 @@ export const loginHandler = (e) => {
         )
       );
     }
-
-    routes();
   });
 };
 export const toRegistration = () => {

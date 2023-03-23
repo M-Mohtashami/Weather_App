@@ -141,7 +141,7 @@ const renderHistory = () => {
     El({
       element: 'div',
       className:
-        'w-full flex flex-row gap-4 md:flex-col col-span-2 md:col-span-1',
+        'h-auto flex flex-row gap-4 md:flex-col col-span-2 md:col-span-1 overflow-x-scroll md:h-96 md:overflow-y-scroll scrollbar-hide',
     });
   searchHistory.innerHTML = '';
   historySearch = JSON.parse(localStorage.getItem('History'));
@@ -154,7 +154,7 @@ const renderHistory = () => {
         const row = El({
           element: 'div',
           className:
-            'flex items-center justify-between gap-2 p-2 w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700',
+            'w-full max-w-xs flex items-center justify-between flex-shrink-0 gap-2 p-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700',
           children: [
             El({
               element: 'img',
@@ -167,12 +167,12 @@ const renderHistory = () => {
               children: [
                 El({
                   element: 'span',
-                  className: 'font-semibold',
+                  className: 'text-sm truncate md:text-md md:font-semibold',
                   innerText: data.name + ' , ' + data.sys.country,
                 }),
                 El({
                   element: 'span',
-                  className: '',
+                  className: 'text-sm md:text-md',
                   innerText: data.weather[0].main,
                 }),
               ],
@@ -183,12 +183,12 @@ const renderHistory = () => {
               children: [
                 El({
                   element: 'span',
-                  className: 'text-6xl font-bold',
+                  className: 'text-2xl md:text-6xl md:font-bold',
                   innerText: parseInt(data.main.temp),
                 }),
                 El({
                   element: 'span',
-                  className: 'text-lg',
+                  className: 'text-sm md:text-lg',
                   innerText: 'o',
                 }),
               ],
@@ -203,7 +203,7 @@ const renderHistory = () => {
 };
 
 const apiData = (e) => {
-  const wheatherCard = document.getElementById('wheather-details');
+  const weatherCard = document.getElementById('wheather-details');
   const content = document.getElementById('content');
   const searchBox = document.getElementById('search-box');
   const searchIcon = document.getElementById('search-icon');
@@ -228,7 +228,7 @@ const apiData = (e) => {
       searchBox.classList.add('-translate-y-20');
       search.classList.remove('p-4', 'dark:bg-gray-600', 'bg-gray-200');
       search.classList.add('p-2.5', 'dark:bg-gray-700', 'bg-gray-50');
-      renderCard(data, wheatherCard);
+      renderCard(data, weatherCard);
       if (historySearch) {
         historySearch.length >= 6 ? historySearch.pop() : null;
         historySearch.unshift(data.name);
@@ -241,6 +241,31 @@ const apiData = (e) => {
       console.log(data);
     }
   });
+};
+
+export const renderHome = () => {
+  const weatherCard = document.getElementById('wheather-details');
+  const content = document.getElementById('content');
+  const searchBox = document.getElementById('search-box');
+  const searchIcon = document.getElementById('search-icon');
+  const search = document.getElementById('search');
+
+  if (historySearch) {
+    content.classList.add('opacity-100');
+    content.classList.remove('opacity-0');
+    searchIcon.classList.remove('top-6');
+    searchIcon.classList.add('top-4');
+    searchBox.classList.add('-translate-y-20');
+    search.classList.remove('p-4', 'dark:bg-gray-600', 'bg-gray-200');
+    search.classList.add('p-2.5', 'dark:bg-gray-700', 'bg-gray-50');
+    apiRequest.setEndPoint(
+      `weather?q=${historySearch[0]}&appid=c2a5e5757bf8e2de367336c584de74bd&units=metric`
+    );
+    apiRequest.getDB().then((data) => {
+      renderCard(data, weatherCard);
+    });
+    renderHistory();
+  }
 };
 
 export const home = () => {
@@ -278,13 +303,13 @@ export const home = () => {
             element: 'div',
             id: 'wheather-details',
             className:
-              'w-full mx-w-sm h-auto p-6 col-span-2 md:col-span-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700',
+              'w-full mx-auto max-w-sm h-auto p-6 col-span-2 md:col-span-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700',
           }),
           El({
             element: 'div',
             id: 'search-history',
             className:
-              'w-full h-96 flex flex-row gap-4 md:flex-col col-span-2 md:col-span-1 overflow-y-scroll scrollbar-hide',
+              'h-auto flex flex-row gap-4 md:flex-col col-span-2 md:col-span-1 overflow-x-scroll md:h-96 md:overflow-y-scroll scrollbar-hide',
             children: [renderHistory()],
           }),
         ],
