@@ -141,7 +141,7 @@ const renderHistory = () => {
     El({
       element: 'div',
       className:
-        'w-full flex flex-row gap-4 md:flex-col col-span-2 md:col-span-1 truncate',
+        'w-full flex flex-row gap-4 md:flex-col col-span-2 md:col-span-1',
     });
   searchHistory.innerHTML = '';
   historySearch = JSON.parse(localStorage.getItem('History'));
@@ -154,7 +154,7 @@ const renderHistory = () => {
         const row = El({
           element: 'div',
           className:
-            'flex items-center gap-2 p-2 w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700',
+            'flex items-center justify-between gap-2 p-2 w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700',
           children: [
             El({
               element: 'img',
@@ -206,20 +206,31 @@ const apiData = (e) => {
   const wheatherCard = document.getElementById('wheather-details');
   const content = document.getElementById('content');
   const searchBox = document.getElementById('search-box');
+  const searchIcon = document.getElementById('search-icon');
+  const search = document.getElementById('search');
   apiRequest.setEndPoint(
     `weather?q=${e.target.value}&appid=c2a5e5757bf8e2de367336c584de74bd&units=metric`
   );
   apiRequest.getDB().then((data) => {
-    if (e.target.value === '') {
+    if (e.target.value === '' && !historySearch) {
       content.classList.add('opacity-0');
       content.classList.remove('opacity-100');
+      searchIcon.classList.add('top-6');
+      searchIcon.classList.remove('top-4');
       searchBox.classList.remove('-translate-y-20');
+      search.classList.add('p-4', 'dark:bg-gray-600', 'bg-gray-200');
+      search.classList.remove('p-2.5', 'dark:bg-gray-700', 'bg-gray-50');
     } else {
       content.classList.add('opacity-100');
       content.classList.remove('opacity-0');
+      searchIcon.classList.remove('top-6');
+      searchIcon.classList.add('top-4');
       searchBox.classList.add('-translate-y-20');
+      search.classList.remove('p-4', 'dark:bg-gray-600', 'bg-gray-200');
+      search.classList.add('p-2.5', 'dark:bg-gray-700', 'bg-gray-50');
       renderCard(data, wheatherCard);
       if (historySearch) {
+        historySearch.length >= 6 ? historySearch.pop() : null;
         historySearch.unshift(data.name);
         localStorage.setItem('History', JSON.stringify(historySearch));
       } else {
@@ -245,12 +256,14 @@ export const home = () => {
         children: [
           Textfield({
             placeholder: 'search',
+            id: 'search',
             variant: 'search',
             onkeyup: debounce(apiData, 500),
           }),
           El({
             element: 'span',
-            className: 'absolute left-2',
+            id: 'search-icon',
+            className: 'absolute left-2 top-6',
             innerHTML: svgs.SearchIcon,
           }),
         ],
@@ -265,13 +278,13 @@ export const home = () => {
             element: 'div',
             id: 'wheather-details',
             className:
-              'w-full h-auto p-6 col-span-2 md:col-span-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700',
+              'w-full mx-w-sm h-auto p-6 col-span-2 md:col-span-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700',
           }),
           El({
             element: 'div',
             id: 'search-history',
             className:
-              'w-full h-96 flex flex-row gap-4 md:flex-col col-span-2 md:col-span-1 overflow-y-scroll',
+              'w-full h-96 flex flex-row gap-4 md:flex-col col-span-2 md:col-span-1 overflow-y-scroll scrollbar-hide',
             children: [renderHistory()],
           }),
         ],

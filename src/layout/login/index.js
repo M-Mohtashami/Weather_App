@@ -2,6 +2,7 @@ import { Button, Textfield } from '@/components';
 import { El } from '@/library/elem';
 import { routes } from '@/Routes';
 import { DB } from '@/library';
+import { modal } from '@/layout';
 
 export const login = () => {
   return El({
@@ -28,6 +29,34 @@ export const login = () => {
         type: 'password',
         name: 'password',
         required: true,
+      }),
+      El({
+        element: 'div',
+        className: 'flex items-start mb-6',
+        children: [
+          El({
+            element: 'div',
+            className: 'flex items-center h-5',
+            children: [
+              El({
+                element: 'input',
+                id: 'remember',
+                name: 'remember',
+                type: 'checkbox',
+                value: '',
+                className:
+                  'w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800',
+              }),
+            ],
+          }),
+          El({
+            element: 'label',
+            for: 'remember',
+            className:
+              'ml-2 text-sm font-medium text-gray-900 dark:text-gray-300',
+            innerText: 'Remember Me',
+          }),
+        ],
       }),
       Button({
         child: 'Login',
@@ -58,18 +87,48 @@ export const login = () => {
 
 export const loginHandler = (e) => {
   e.preventDefault();
+  const popupModal = document.getElementById('popup-modal');
   const users = new DB('users');
   const formData = new FormData(e.target);
+  console.log(formData.has('remember'));
   users.setEndPoint(`users?email=${formData.get('email')}`);
 
   users.getItem().then((response) => {
-    if (response !== []) {
-      response[0].password === formData.get('password')
-        ? history.pushState(null, null, '/')
-        : history.pushState(null, null, '/login');
+    console.log(response.length);
+    if (response.length > 0) {
+      if (response[0].password === formData.get('password')) {
+        history.pushState(null, null, '/');
+      } else {
+        e.target.reset();
+        popupModal.classList.remove('hidden');
+        popupModal.innerHTML = '';
+        popupModal.appendChild(
+          modal('Input password is not corrected please try again', {
+            text: 'Try Again',
+            func: (e) => {
+              history.pushState(null, null, '/login');
+              e.target.closest('#popup-modal').classList.add('hidden');
+              routes();
+            },
+          })
+        );
+      }
     } else {
-      history.pushState(null, null, '/register');
-      console.log('user not found');
+      popupModal.classList.remove('hidden');
+      popupModal.innerHTML = '';
+      popupModal.appendChild(
+        modal(
+          'This email is not a registered email please fill registration form',
+          {
+            text: 'Registration',
+            func: (e) => {
+              history.pushState(null, null, '/register');
+              e.target.closest('#popup-modal').classList.add('hidden');
+              routes();
+            },
+          }
+        )
+      );
     }
 
     routes();
