@@ -1,4 +1,4 @@
-import { Button, Textfield } from '@/components';
+import { Button, Textfield, spiner } from '@/components';
 import { DB, El } from '@/library';
 import { routes } from '@/Routes';
 import { modal } from '@/layout';
@@ -75,14 +75,19 @@ export const registerHandler = (e) => {
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData);
 
+  popupModal.classList.remove('hidden');
+  popupModal.innerHTML = '';
+  popupModal.appendChild(spiner());
   users.getItem(formData.get('email')).then((response) => {
     if (response === []) {
       users.addItem(data).then(() => {
         history.pushState(null, null, '/login');
+        popupModal.classList.add('hidden');
+        popupModal.innerHTML = '';
         routes();
       });
     } else {
-      popupModal.classList.remove('hidden');
+      // popupModal.classList.remove('hidden');
       popupModal.innerHTML = '';
       popupModal.appendChild(
         modal('This email is registered before, Please login', {

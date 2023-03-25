@@ -6,7 +6,7 @@ import { routes } from '@/Routes';
 export const app = () => {
   return El({
     element: 'div',
-    className: '',
+    className: 'w-full h-full',
     children: [
       modeToggle(),
       El({
@@ -18,6 +18,7 @@ export const app = () => {
       }),
       El({
         element: 'div',
+        className: 'w-full',
         id: 'routes',
         children: [routes()],
       }),

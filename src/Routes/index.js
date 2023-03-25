@@ -1,11 +1,15 @@
-import { auth, home } from '@/screens';
+import { auth, home, welcome } from '@/screens';
 import { login, register } from '@/layout';
 import { El } from '@/library';
+import Cookies from 'js-cookie';
 
 const privateRoutes = (elem, child) => {
-  return Cookies.get('weather')
-    ? elem.appendChild(child)
-    : elem.appendChild(auth(login()));
+  if (Cookies.get('weather')) {
+    return elem.appendChild(child);
+  } else {
+    history.pushState(null, null, '/login');
+    return elem.appendChild(auth(login()));
+  }
 };
 
 export const routes = () => {
@@ -13,8 +17,11 @@ export const routes = () => {
   routesEl.innerHTML = '';
   console.log(location.pathname);
   switch (location.pathname) {
+    case '/welcome':
+      return routesEl.appendChild(welcome());
     case '/':
-      return routesEl.appendChild(home());
+    case '/home':
+      return privateRoutes(routesEl, home());
     case '/login':
       return routesEl.appendChild(auth(login()));
     case '/register':

@@ -1,4 +1,4 @@
-import { Button, Textfield } from '@/components';
+import { Button, Textfield, spiner } from '@/components';
 import { routes } from '@/Routes';
 import { DB, El } from '@/library';
 import { modal } from '@/layout';
@@ -96,18 +96,23 @@ export const loginHandler = (e) => {
   console.log(token);
   users.setEndPoint(`users?email=${formData.get('email')}`);
 
+  popupModal.classList.remove('hidden');
+  popupModal.innerHTML = '';
+  popupModal.appendChild(spiner());
   users.getItem().then((response) => {
     console.log(response.length);
     if (response.length > 0) {
       if (response[0].password === formData.get('password')) {
         formData.has('remember')
           ? Cookies.set('weather', token, { expires: 7 })
-          : null;
-        history.pushState(null, null, '/');
+          : Cookies.set('weather', token);
+        history.pushState(null, null, '/home');
+        popupModal.classList.add('hidden');
+        popupModal.innerHTML = '';
         routes();
       } else {
         e.target.reset();
-        popupModal.classList.remove('hidden');
+        // popupModal.classList.remove('hidden');
         popupModal.innerHTML = '';
         popupModal.appendChild(
           modal('Input password is not corrected please try again', {
@@ -121,7 +126,7 @@ export const loginHandler = (e) => {
         );
       }
     } else {
-      popupModal.classList.remove('hidden');
+      // popupModal.classList.remove('hidden');
       popupModal.innerHTML = '';
       popupModal.appendChild(
         modal(
