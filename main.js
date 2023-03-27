@@ -12,7 +12,17 @@ history.pushState(null, null, '/welcome');
 //   : history.pushState(null, null, '/login');
 weather.appendChild(app());
 weather.classList.add('h-full');
-weather.classList.add('dark:bg-slate-800');
+weather.classList.add(
+  'font-rubik',
+  'bg-gradient-to-tl',
+  'from-blue-600',
+  'via-blue-400',
+  'to-blue-200',
+  'dark:bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))]',
+  'dark:from-blue-400',
+  'dark:via-blue-900',
+  'dark:to-slate-800'
+);
 
 if (localStorage.theme === 'dark') {
   const dark = document.getElementById('theme-toggle-dark-icon');

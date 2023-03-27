@@ -163,7 +163,7 @@ const renderHistory = () => {
             name: data.name,
           },
           className:
-            'w-full max-w-xs flex items-center justify-between flex-shrink-0 gap-2 p-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700 cursor-pointer',
+            'w-full max-w-xs flex items-center justify-between flex-shrink-0 gap-2 p-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700 cursor-pointer bg-opacity-40 dark:bg-opacity-40',
           children: [
             El({
               element: 'img',
@@ -302,6 +302,7 @@ const searchHistoryHandler = (e) => {
           El({
             element: 'input',
             id: 'search-alt',
+            autofocus: true,
             className:
               'bg-gray-200 bg-opacity-0 text-gray-900 text-md focus:outline-none w-full',
             placeholder: 'search',
@@ -456,7 +457,7 @@ export const home = () => {
             element: 'div',
             id: 'wheather-details',
             className:
-              'w-full mx-auto flex items-center justify-center max-w-sm h-auto p-4 col-span-2 md:col-span-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700',
+              'w-full mx-auto flex items-center justify-center max-w-sm h-auto p-4 col-span-2 md:col-span-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700 bg-opacity-40 dark:bg-opacity-40',
           }),
           El({
             element: 'div',

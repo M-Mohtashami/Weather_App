@@ -18,7 +18,7 @@ export const app = () => {
       }),
       El({
         element: 'div',
-        className: 'w-full',
+        className: 'w-full transition ease-in-out duration-700',
         id: 'routes',
         children: [routes()],
       }),

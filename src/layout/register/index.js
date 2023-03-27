@@ -61,6 +61,7 @@ export const register = () => {
           },
         ],
         variant: 'link',
+        type: 'button',
         classes:
           'text-slate-800 font-semibold px-4 underline dark:text-slate-200',
       }),
@@ -79,12 +80,17 @@ export const registerHandler = (e) => {
   popupModal.innerHTML = '';
   popupModal.appendChild(spiner());
   users.getItem(formData.get('email')).then((response) => {
-    if (response === []) {
+    console.log(response);
+    if (response.length < 1) {
+      e.target.closest('#routes').classList.toggle('-translate-x-[100%]');
       users.addItem(data).then(() => {
-        history.pushState(null, null, '/login');
-        popupModal.classList.add('hidden');
-        popupModal.innerHTML = '';
-        routes();
+        setTimeout(() => {
+          e.target.closest('#routes').classList.toggle('-translate-x-[100%]');
+          history.pushState(null, null, '/login');
+          popupModal.classList.add('hidden');
+          popupModal.innerHTML = '';
+          routes();
+        }, 300);
       });
     } else {
       // popupModal.classList.remove('hidden');
@@ -93,16 +99,28 @@ export const registerHandler = (e) => {
         modal('This email is registered before, Please login', {
           text: 'login form',
           func: (e) => {
-            history.pushState(null, null, '/login');
-            e.target.closest('#popup-modal').classList.add('hidden');
-            routes();
+            document
+              .getElementById('routes')
+              .classList.toggle('-translate-x-[100%]');
+            setTimeout(() => {
+              document
+                .getElementById('routes')
+                .classList.toggle('-translate-x-[100%]');
+              history.pushState(null, null, '/login');
+              e.target.closest('#popup-modal').classList.add('hidden');
+              routes();
+            }, 500);
           },
         })
       );
     }
   });
 };
-export const toLogin = () => {
-  history.pushState(null, null, '/login');
-  routes();
+export const toLogin = (e) => {
+  e.target.closest('#routes').classList.toggle('-translate-x-[100%]');
+  setTimeout(() => {
+    e.target.closest('#routes').classList.toggle('-translate-x-[100%]');
+    history.pushState(null, null, '/login');
+    routes();
+  }, 500);
 };

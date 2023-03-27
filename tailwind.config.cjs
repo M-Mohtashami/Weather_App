@@ -1,4 +1,13 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme');
+const plugin = require('tailwindcss/plugin');
+const rotateY = plugin(function ({ addUtilities }) {
+  addUtilities({
+    '.rotate-y-full': {
+      transform: 'rotateY(3.142rad)',
+    },
+  });
+});
 module.exports = {
   darkMode: 'class',
   content: [
@@ -8,7 +17,19 @@ module.exports = {
     './node_modules/flowbite/**/*.js',
   ],
   theme: {
+    rotateY: {
+      full: '3.142rad',
+    },
+    fontFamily: {
+      rubik: ['Rubik', ...defaultTheme.fontFamily.sans],
+    },
     extend: {
+      colors: {
+        'dark-blue': '#00106B',
+        'light-blue': '#0464AF',
+        'lighter-blue': '#6AAFFE',
+        sun: '#FBE05E',
+      },
       keyframes: {
         pulse: {
           '0%': { opacity: '1' },
@@ -20,5 +41,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('flowbite/plugin')],
+  plugins: [require('flowbite/plugin'), rotateY],
 };

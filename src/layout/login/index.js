@@ -16,7 +16,7 @@ export const login = () => {
       },
     ],
     className:
-      'bg-slate-100 p-4 py-12 rounded-md border border-slate-200 shadow-md dark:bg-slate-600 dark:border-slate-500 dark:shadow-slate-400 dark:shadow-sm',
+      'bg-slate-100 p-4 py-12 rounded-md border border-slate-200 shadow-md dark:bg-slate-600 dark:border-slate-500 dark:shadow-slate-400 dark:shadow-sm ',
     children: [
       Textfield({
         label: 'Your email',
@@ -77,8 +77,8 @@ export const login = () => {
             callback: toRegistration,
           },
         ],
-        type: 'submit',
         variant: 'link',
+        type: 'button',
         classes:
           'text-slate-800 font-semibold px-4 underline dark:text-slate-200',
       }),
@@ -88,6 +88,7 @@ export const login = () => {
 
 export const loginHandler = (e) => {
   e.preventDefault();
+  e.target.closest('#login-form').classList.toggle('rotate-y-full');
   const popupModal = document.getElementById('popup-modal');
   const users = new DB('users');
   const formData = new FormData(e.target);
@@ -144,7 +145,12 @@ export const loginHandler = (e) => {
     }
   });
 };
-export const toRegistration = () => {
-  history.pushState(null, null, '/register');
-  routes();
+export const toRegistration = (e) => {
+  e.target.closest('#routes').classList.toggle('-translate-x-[100%]');
+
+  setTimeout(() => {
+    e.target.closest('#routes').classList.toggle('-translate-x-[100%]');
+    history.pushState(null, null, '/register');
+    routes();
+  }, 500);
 };
