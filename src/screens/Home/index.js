@@ -271,6 +271,7 @@ const apiData = (e) => {
       if (historySearch) {
         historySearch.length >= 6 ? historySearch.pop() : null;
         historySearch.unshift(data.name);
+        historySearch = Array.from(new Set(historySearch));
         localStorage.setItem('History', JSON.stringify(historySearch));
       } else {
         let historySearch = [];
@@ -280,6 +281,105 @@ const apiData = (e) => {
       console.log(data);
     }
   });
+};
+
+const searchHistoryHandler = (e) => {
+  console.log(historySearch);
+  const list = document.getElementById('prev-search');
+  list.innerHTML = '';
+  if (historySearch) {
+    list.appendChild(
+      El({
+        element: 'li',
+        className:
+          'w-full bg-gray-100 flex items-center justify-start gap-4 p-2 px-4',
+        children: [
+          El({
+            element: 'span',
+            className: '[&_path]:fill-gray-600',
+            innerHTML: svgs.SearchIcon,
+          }),
+          El({
+            element: 'input',
+            id: 'search-alt',
+            className:
+              'bg-gray-200 bg-opacity-0 text-gray-900 text-md focus:outline-none w-full',
+            placeholder: 'search',
+            onchange: (e) => {
+              console.log(e);
+            },
+            onkeyup: debounce(apiData, 500),
+          }),
+        ],
+      })
+    );
+    const search = document.getElementById('search');
+    const searchAlt = document.getElementById('search-alt');
+    list.classList.remove('hidden');
+    searchAlt.value = search.value;
+    search.disabled = true;
+    historySearch.map((item) => {
+      list.appendChild(
+        El({
+          element: 'li',
+          onclick: (e) => {
+            const weatherCard = document.getElementById('wheather-details');
+            searchAlt.value = item;
+            apiRequest.setEndPoint(
+              `weather?q=${item}&appid=c2a5e5757bf8e2de367336c584de74bd&units=metric`
+            );
+            weatherCard.innerHTML = '';
+            weatherCard.appendChild(spiner());
+            apiRequest.getDB().then((data) => {
+              renderCard(data, weatherCard);
+              if (historySearch) {
+                historySearch.length >= 6 ? historySearch.pop() : null;
+                historySearch.unshift(data.name);
+                historySearch = Array.from(new Set(historySearch));
+                localStorage.setItem('History', JSON.stringify(historySearch));
+              } else {
+                let historySearch = [];
+                historySearch.unshift(data.name);
+                localStorage.setItem('History', JSON.stringify(historySearch));
+              }
+            });
+          },
+          className:
+            'w-full flex items-center justify-start gap-4 p-2 px-4 text-slate-600 hover:bg-slate-300 cursor-pointer',
+          children: [
+            El({
+              element: 'span',
+              className: '[&_path]:fill-slate-600',
+              innerHTML: svgs.History,
+            }),
+            El({
+              element: 'span',
+              className: '',
+              innerHTML: item,
+            }),
+          ],
+        })
+      );
+    });
+    list.appendChild(
+      El({
+        element: 'li',
+        className:
+          'w-full flex items-center justify-center gap-4 p-2 px-4 text-slate-600 hover:bg-slate-600 hover:text-slate-100 cursor-pointer',
+        children: [
+          El({
+            element: 'span',
+            className: '',
+            onclick: () => {
+              localStorage.removeItem('History');
+              searchHistoryHandler();
+            },
+            innerHTML: 'Clear History',
+          }),
+        ],
+      })
+    );
+  }
 };
 
 const historyHandler = (e) => {
@@ -313,6 +413,16 @@ export const home = () => {
             id: 'search',
             variant: 'search',
             onkeyup: debounce(apiData, 500),
+            eventListener: [
+              {
+                event: 'click',
+                callback: searchHistoryHandler,
+              },
+              {
+                event: 'keydown',
+                callback: searchHistoryHandler,
+              },
+            ],
           }),
           El({
             element: 'span',
@@ -323,8 +433,16 @@ export const home = () => {
           El({
             element: 'ul',
             id: 'prev-search',
+            onmouseleave: (e) => {
+              const search = document.getElementById('search');
+              const searchAlt = document.getElementById('search-alt');
+              search.value = searchAlt.value;
+              search.disabled = false;
+              e.currentTarget.classList.add('hidden');
+            },
             className:
-              'w-full bg-white absolute top-14 rounded-b-md bg-opacity-70 hidden',
+              'w-full bg-white hidden divide-y divide-gray-300 shadow-md border border-slate-300 absolute top-0 rounded-md bg-opacity-90 z-30 overflow-hidden',
+            children: [],
           }),
         ],
       }),
