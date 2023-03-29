@@ -19,7 +19,7 @@ weather.classList.add(
   'via-blue-400',
   'to-blue-200',
   'dark:bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))]',
-  'dark:from-blue-400',
+  'dark:from-blue-600',
   'dark:via-blue-900',
   'dark:to-slate-800'
 );

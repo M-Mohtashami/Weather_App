@@ -21,6 +21,7 @@ export const routes = () => {
       return routesEl.appendChild(welcome());
     case '/':
     case '/home':
+      document.getElementById('logout').classList.remove('hidden');
       return privateRoutes(routesEl, home());
     case '/login':
       return routesEl.appendChild(auth(login()));

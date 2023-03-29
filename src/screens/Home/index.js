@@ -12,7 +12,7 @@ let historySearch = JSON.parse(localStorage.getItem('History')) || [];
 const renderCard = (data, elem) => {
   const details = El({
     element: 'div',
-    className: 'w-full flex flex-col items-center gap-6',
+    className: 'w-full flex flex-col items-center gap-2',
     children: [
       El({
         element: 'span',
@@ -23,11 +23,18 @@ const renderCard = (data, elem) => {
         element: 'div',
         className: 'w-full flex items-center justify-center gap-16',
         children: [
-          El({
-            element: 'img',
-            className: 'w-16',
-            src: `https://openweathermap.org/img/w/${data.weather[0].icon}.png`,
-          }),
+          svgs[data.weather[0].icon]
+            ? El({
+                element: 'span',
+                className:
+                  '[&_svg]:w-24 [&_path]:fill-slate-700 dark:[&_path]:fill-slate-200',
+                innerHTML: svgs[data.weather[0].icon],
+              })
+            : El({
+                element: 'img',
+                className: 'w-16',
+                src: `https://openweathermap.org/img/w/${data.weather[0].icon}.png`,
+              }),
           El({
             element: 'div',
             className: 'flex flex-col items-center justify-center',
@@ -48,11 +55,16 @@ const renderCard = (data, elem) => {
       }),
       El({
         element: 'div',
+        className:
+          'w-full bg-transparent border-t border-slate-700 dark:border-slate-200',
+      }),
+      El({
+        element: 'div',
         className: 'w-full flex items-end justify-center gap-16',
         children: [
           El({
             element: 'div',
-            className: 'flex justify-center',
+            className: 'flex items-center justify-center',
             children: [
               El({
                 element: 'span',
@@ -86,16 +98,21 @@ const renderCard = (data, elem) => {
       }),
       El({
         element: 'div',
-        className: 'flex flex-col items-start justify-between gap-2',
+        className:
+          'w-full bg-transparent border-t border-slate-700 dark:border-slate-200',
+      }),
+      El({
+        element: 'div',
+        className: ' flex flex-col items-start justify-between gap-2',
         children: [
           El({
             element: 'div',
-            className: 'flex items-center justify-center gap-4',
+            className: 'flex items-center justify-between gap-10',
             children: [
               El({
                 element: 'span',
                 className:
-                  '[&_path]:fill-slate-600 dark:[&_path]:fill-slate-100 w-5',
+                  '[&_svg]:w-8 [&_path]:fill-slate-600 dark:[&_path]:fill-slate-100 w-5',
                 innerHTML: svgs.Wind,
               }),
               El({
@@ -113,7 +130,7 @@ const renderCard = (data, elem) => {
           }),
           El({
             element: 'div',
-            className: 'flex items-start justify-between gap-4',
+            className: 'flex items-center justify-between gap-10',
             children: [
               El({
                 element: 'span',
@@ -147,7 +164,7 @@ const renderHistory = () => {
     El({
       element: 'div',
       className:
-        'h-auto flex flex-row gap-4 md:flex-col col-span-2 md:col-span-1 overflow-x-scroll md:h-96 md:overflow-y-scroll scrollbar-hide hover:scroll-auto',
+        'relative h-auto flex flex-row gap-4 md:flex-col col-span-2 md:col-span-1 overflow-x-scroll md:h-96 md:overflow-y-scroll scrollbar-hide hover:scroll-auto',
     });
   searchHistory.innerHTML = '';
   historySearch = JSON.parse(localStorage.getItem('History'));
@@ -163,13 +180,25 @@ const renderHistory = () => {
             name: data.name,
           },
           className:
-            'w-full max-w-xs flex items-center justify-between flex-shrink-0 gap-2 p-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700 cursor-pointer bg-opacity-40 dark:bg-opacity-40',
+            'w-full h-20 max-w-xs flex items-center justify-between flex-shrink-0 gap-2 p-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700 cursor-pointer bg-opacity-40 dark:bg-opacity-40',
           children: [
-            El({
-              element: 'img',
-              className: 'w-16',
-              src: `https://openweathermap.org/img/w/${data.weather[0].icon}.png`,
-            }),
+            svgs[data.weather[0].icon]
+              ? El({
+                  element: 'span',
+                  className:
+                    '[&_svg]:w-20 [&_path]:fill-slate-700 dark:[&_path]:fill-slate-200',
+                  innerHTML: svgs[data.weather[0].icon],
+                })
+              : El({
+                  element: 'img',
+                  className: 'w-16',
+                  src: `https://openweathermap.org/img/w/${data.weather[0].icon}.png`,
+                }),
+            // El({
+            //   element: 'div',
+            //   className:
+            //     'w-full bg-transparent border-t border-slate-700 dark:border-slate-200',
+            // }),
             El({
               element: 'div',
               className: 'flex flex-col items-center',
@@ -186,13 +215,18 @@ const renderHistory = () => {
                 }),
               ],
             }),
+            // El({
+            //   element: 'div',
+            //   className:
+            //     'w-full bg-transparent border-t border-slate-700 dark:border-slate-200',
+            // }),
             El({
               element: 'div',
               className: 'flex justify-center',
               children: [
                 El({
                   element: 'span',
-                  className: 'text-2xl md:text-6xl md:font-bold',
+                  className: 'text-2xl md:text-4xl md:font-semibold',
                   innerText: parseInt(data.main.temp),
                 }),
                 El({
@@ -207,6 +241,13 @@ const renderHistory = () => {
         searchHistory.appendChild(row);
       });
     });
+    // searchHistory.appendChild(
+    //   El({
+    //     element: 'div',
+    //     className:
+    //       'h-20 w-24 bg-gradient-to-l dark:bg-gradient-to-l from-[#3577F5] dark:from-[#203055] absolute right-0 md:h-24 md:w-full md:bg-gradient-to-t md:bottom-0',
+    //   })
+    // );
   }
   return searchHistory;
 };
@@ -223,7 +264,7 @@ export const renderHome = () => {
     content.classList.remove('opacity-0');
     searchIcon.classList.remove('top-6');
     searchIcon.classList.add('top-4');
-    searchBox.classList.add('-translate-y-20');
+    searchBox.classList.add('-translate-y-[4.5rem]');
     search.classList.remove('p-4', 'dark:bg-gray-600', 'bg-gray-200');
     search.classList.add('p-2.5', 'dark:bg-gray-700', 'bg-gray-50');
     apiRequest.setEndPoint(
@@ -366,7 +407,7 @@ const apiData = (e) => {
       content.classList.remove('opacity-100');
       searchIcon.classList.add('top-6');
       searchIcon.classList.remove('top-4');
-      searchBox.classList.remove('-translate-y-20');
+      searchBox.classList.remove('-translate-y-[4.5rem]');
       search.classList.add('p-4', 'dark:bg-gray-600', 'bg-gray-200');
       search.classList.remove('p-2.5', 'dark:bg-gray-700', 'bg-gray-50');
       renderHome();
@@ -375,7 +416,7 @@ const apiData = (e) => {
       content.classList.remove('opacity-0');
       searchIcon.classList.remove('top-6');
       searchIcon.classList.add('top-4');
-      searchBox.classList.add('-translate-y-20');
+      searchBox.classList.add('-translate-y-[4.5rem]');
       search.classList.remove('p-4', 'dark:bg-gray-600', 'bg-gray-200');
       search.classList.add('p-2.5', 'dark:bg-gray-700', 'bg-gray-50');
       renderCard(data, weatherCard);
@@ -486,7 +527,7 @@ export const home = () => {
               },
             ],
             className:
-              'h-auto flex flex-row gap-4 md:flex-col col-span-2 md:col-span-1 overflow-x-scroll md:h-96 md:overflow-y-scroll scrollbar-hide',
+              'relative h-auto flex flex-row gap-4 md:flex-col col-span-2 md:col-span-1 overflow-x-scroll md:h-96 md:overflow-y-scroll scrollbar-hide',
             children: [renderHistory()],
           }),
         ],
