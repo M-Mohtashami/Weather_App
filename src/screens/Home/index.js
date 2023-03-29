@@ -238,54 +238,10 @@ export const renderHome = () => {
   }
 };
 
-const apiData = (e) => {
-  const weatherCard = document.getElementById('wheather-details');
-  const content = document.getElementById('content');
-  const searchBox = document.getElementById('search-box');
-  const searchIcon = document.getElementById('search-icon');
-  const search = document.getElementById('search');
-  apiRequest.setEndPoint(
-    `weather?q=${e.target.value}&appid=c2a5e5757bf8e2de367336c584de74bd&units=metric`
-  );
-  weatherCard.innerHTML = '';
-  weatherCard.appendChild(spiner());
-  apiRequest.getDB().then((data) => {
-    if (e.target.value === '' && !historySearch) {
-      content.classList.add('opacity-0');
-      content.classList.remove('opacity-100');
-      searchIcon.classList.add('top-6');
-      searchIcon.classList.remove('top-4');
-      searchBox.classList.remove('-translate-y-20');
-      search.classList.add('p-4', 'dark:bg-gray-600', 'bg-gray-200');
-      search.classList.remove('p-2.5', 'dark:bg-gray-700', 'bg-gray-50');
-      renderHome();
-    } else {
-      content.classList.add('opacity-100');
-      content.classList.remove('opacity-0');
-      searchIcon.classList.remove('top-6');
-      searchIcon.classList.add('top-4');
-      searchBox.classList.add('-translate-y-20');
-      search.classList.remove('p-4', 'dark:bg-gray-600', 'bg-gray-200');
-      search.classList.add('p-2.5', 'dark:bg-gray-700', 'bg-gray-50');
-      renderCard(data, weatherCard);
-      if (historySearch) {
-        historySearch.length >= 6 ? historySearch.pop() : null;
-        historySearch.unshift(data.name);
-        historySearch = Array.from(new Set(historySearch));
-        localStorage.setItem('History', JSON.stringify(historySearch));
-      } else {
-        let historySearch = [];
-        historySearch.unshift(data.name);
-        localStorage.setItem('History', JSON.stringify(historySearch));
-      }
-      console.log(data);
-    }
-  });
-};
-
 const searchHistoryHandler = (e) => {
   console.log(historySearch);
   const list = document.getElementById('prev-search');
+  historySearch = JSON.parse(localStorage.getItem('History'));
   list.innerHTML = '';
   if (historySearch) {
     list.appendChild(
@@ -316,7 +272,10 @@ const searchHistoryHandler = (e) => {
     );
     const search = document.getElementById('search');
     const searchAlt = document.getElementById('search-alt');
-    list.classList.remove('hidden');
+    searchAlt.autofocus = true;
+    // list.classList.remove('hidden');
+    list.classList.add('scale-y-100');
+    list.classList.remove('scale-y-0');
     searchAlt.value = search.value;
     search.disabled = true;
     historySearch.map((item) => {
@@ -373,7 +332,9 @@ const searchHistoryHandler = (e) => {
             className: '',
             onclick: () => {
               localStorage.removeItem('History');
+              document.getElementById('search').disabled = false;
               searchHistoryHandler();
+              renderHistory();
             },
             innerHTML: 'Clear History',
           }),
@@ -381,6 +342,60 @@ const searchHistoryHandler = (e) => {
       })
     );
   }
+};
+
+const apiData = (e) => {
+  const weatherCard = document.getElementById('wheather-details');
+  const content = document.getElementById('content');
+  const searchBox = document.getElementById('search-box');
+  const searchIcon = document.getElementById('search-icon');
+  const search = document.getElementById('search');
+
+  if (e.target.value === '') {
+    search.value = '';
+    document.getElementById('search-alt').value = '';
+  }
+  apiRequest.setEndPoint(
+    `weather?q=${e.target.value}&appid=c2a5e5757bf8e2de367336c584de74bd&units=metric`
+  );
+  weatherCard.innerHTML = '';
+  weatherCard.appendChild(spiner());
+  apiRequest.getDB().then((data) => {
+    if (e.target.value === '' && !historySearch) {
+      content.classList.add('opacity-0');
+      content.classList.remove('opacity-100');
+      searchIcon.classList.add('top-6');
+      searchIcon.classList.remove('top-4');
+      searchBox.classList.remove('-translate-y-20');
+      search.classList.add('p-4', 'dark:bg-gray-600', 'bg-gray-200');
+      search.classList.remove('p-2.5', 'dark:bg-gray-700', 'bg-gray-50');
+      renderHome();
+    } else {
+      content.classList.add('opacity-100');
+      content.classList.remove('opacity-0');
+      searchIcon.classList.remove('top-6');
+      searchIcon.classList.add('top-4');
+      searchBox.classList.add('-translate-y-20');
+      search.classList.remove('p-4', 'dark:bg-gray-600', 'bg-gray-200');
+      search.classList.add('p-2.5', 'dark:bg-gray-700', 'bg-gray-50');
+      renderCard(data, weatherCard);
+      if (historySearch) {
+        historySearch.unshift(data.name);
+        historySearch = Array.from(new Set(historySearch));
+        historySearch.length >= 6 ? historySearch.pop() : null;
+        localStorage.setItem('History', JSON.stringify(historySearch));
+        searchHistoryHandler();
+        renderHistory();
+      } else {
+        let historySearch = [];
+        historySearch.unshift(data.name);
+        localStorage.setItem('History', JSON.stringify(historySearch));
+        searchHistoryHandler();
+        renderHistory();
+      }
+      console.log(data);
+    }
+  });
 };
 
 const historyHandler = (e) => {
@@ -439,10 +454,12 @@ export const home = () => {
               const searchAlt = document.getElementById('search-alt');
               search.value = searchAlt.value;
               search.disabled = false;
-              e.currentTarget.classList.add('hidden');
+              // e.currentTarget.classList.add('hidden');
+              e.currentTarget.classList.add('scale-y-0');
+              e.currentTarget.classList.remove('scale-y-100');
             },
             className:
-              'w-full bg-white hidden divide-y divide-gray-300 shadow-md border border-slate-300 absolute top-0 rounded-md bg-opacity-90 z-30 overflow-hidden',
+              'w-full bg-white scale-y-0 transition ease-in-out duration-300 origin-top transform divide-y divide-gray-300 shadow-md border border-slate-300 absolute top-0 rounded-md bg-opacity-90 z-30 overflow-hidden',
             children: [],
           }),
         ],

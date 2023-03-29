@@ -1,9 +1,14 @@
 import { El } from '@/library';
 import { svgs } from '@/assets';
 export const modal = (message, action) => {
+  setTimeout(() => {
+    document.getElementById('modal-section').classList.add('opacity-100');
+  }, 10);
   return El({
     element: 'div',
-    className: 'relative w-full h-full max-w-md md:h-auto',
+    id: 'modal-section',
+    className:
+      'relative w-full h-full max-w-md md:h-auto opacity-0 transition ease-in-out duration-300',
     children: [
       El({
         element: 'div',

@@ -88,7 +88,6 @@ export const login = () => {
 
 export const loginHandler = (e) => {
   e.preventDefault();
-  e.target.closest('#login-form').classList.toggle('rotate-y-full');
   const popupModal = document.getElementById('popup-modal');
   const users = new DB('users');
   const formData = new FormData(e.target);
@@ -107,10 +106,14 @@ export const loginHandler = (e) => {
         formData.has('remember')
           ? Cookies.set('weather', token, { expires: 7 })
           : Cookies.set('weather', token);
-        history.pushState(null, null, '/home');
-        popupModal.classList.add('hidden');
-        popupModal.innerHTML = '';
-        routes();
+        e.target.closest('#routes').classList.toggle('-translate-x-[100%]');
+        setTimeout(() => {
+          e.target.closest('#routes').classList.toggle('-translate-x-[100%]');
+          history.pushState(null, null, '/home');
+          popupModal.classList.add('hidden');
+          popupModal.innerHTML = '';
+          routes();
+        }, 500);
       } else {
         e.target.reset();
         // popupModal.classList.remove('hidden');
@@ -135,9 +138,18 @@ export const loginHandler = (e) => {
           {
             text: 'Registration',
             func: (e) => {
-              history.pushState(null, null, '/register');
-              e.target.closest('#popup-modal').classList.add('hidden');
-              routes();
+              document
+                .getElementById('routes')
+                .classList.toggle('-translate-x-[100%]');
+
+              setTimeout(() => {
+                document
+                  .getElementById('routes')
+                  .classList.toggle('-translate-x-[100%]');
+                history.pushState(null, null, '/register');
+                e.target.closest('#popup-modal').classList.add('hidden');
+                routes();
+              }, 500);
             },
           }
         )

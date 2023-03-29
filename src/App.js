@@ -14,7 +14,7 @@ export const app = () => {
         id: 'popup-modal',
         tabindex: '-1',
         className:
-          'fixed top-0 left-0 right-0 z-50 p-4 hidden flex items-center justify-center bg-slate-700 bg-opacity-50 dark:bg-slate-200 dark:bg-opacity-50 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full',
+          'fixed top-0 left-0 right-0 h-full z-50 p-4 hidden flex items-center justify-center bg-slate-700 bg-opacity-50 dark:bg-slate-200 dark:bg-opacity-50 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full',
       }),
       El({
         element: 'div',
