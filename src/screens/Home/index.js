@@ -10,153 +10,159 @@ apiRequest.setBaseUrl('https://api.openweathermap.org/data/2.5');
 let historySearch = JSON.parse(localStorage.getItem('History')) || [];
 
 const renderCard = (data, elem) => {
-  const details = El({
-    element: 'div',
-    className: 'w-full flex flex-col items-center gap-2',
-    children: [
-      El({
-        element: 'span',
-        className: 'font-semibold',
-        innerText: data.name + ' , ' + data.sys.country,
-      }),
-      El({
-        element: 'div',
-        className: 'w-full flex items-center justify-center gap-16',
-        children: [
-          svgs[data.weather[0].icon]
-            ? El({
-                element: 'span',
-                className:
-                  '[&_svg]:w-24 [&_path]:fill-slate-700 dark:[&_path]:fill-slate-200',
-                innerHTML: svgs[data.weather[0].icon],
-              })
-            : El({
-                element: 'img',
-                className: 'w-16',
-                src: `https://openweathermap.org/img/w/${data.weather[0].icon}.png`,
-              }),
-          El({
-            element: 'div',
-            className: 'flex flex-col items-center justify-center',
-            children: [
-              El({
-                element: 'span',
-                className: 'font-semibold',
-                innerText: data.weather[0].main,
-              }),
-              El({
-                element: 'span',
-                className: 'text-sm',
-                innerText: data.weather[0].description,
-              }),
-            ],
-          }),
-        ],
-      }),
-      El({
-        element: 'div',
-        className:
-          'w-full bg-transparent border-t border-slate-700 dark:border-slate-200',
-      }),
-      El({
-        element: 'div',
-        className: 'w-full flex items-end justify-center gap-16',
-        children: [
-          El({
-            element: 'div',
-            className: 'flex items-center justify-center',
-            children: [
-              El({
-                element: 'span',
-                className: 'text-6xl font-bold',
-                innerText: parseInt(data.main.temp),
-              }),
-              El({
-                element: 'span',
-                className: 'text-lg',
-                innerText: 'o',
-              }),
-              El({
-                element: 'span',
-                className: 'text-4xl',
-                innerHTML: ' C',
-              }),
-            ],
-          }),
-          El({
-            element: 'span',
-            className: 'text-2xl',
-            innerText:
-              parseInt(data.main.temp_max) + '/' + parseInt(data.main.temp_min),
-          }),
-        ],
-      }),
-      El({
-        element: 'span',
-        className: 'text-lg',
-        innerText: new Date().toDateString(),
-      }),
-      El({
-        element: 'div',
-        className:
-          'w-full bg-transparent border-t border-slate-700 dark:border-slate-200',
-      }),
-      El({
-        element: 'div',
-        className: ' flex flex-col items-start justify-between gap-2',
-        children: [
-          El({
-            element: 'div',
-            className: 'flex items-center justify-between gap-10',
-            children: [
-              El({
-                element: 'span',
-                className:
-                  '[&_svg]:w-8 [&_path]:fill-slate-600 dark:[&_path]:fill-slate-100 w-5',
-                innerHTML: svgs.Wind,
-              }),
-              El({
-                element: 'span',
-                className:
-                  ' w-16 border-r-2 border-slate-600 dark:border-slate-200',
-                innerText: 'Wind',
-              }),
-              El({
-                element: 'span',
-                className: '',
-                innerText: data.wind.speed,
-              }),
-            ],
-          }),
-          El({
-            element: 'div',
-            className: 'flex items-center justify-between gap-10',
-            children: [
-              El({
-                element: 'span',
-                className:
-                  '[&_path]:fill-blue-600 dark:[&_path]:fill-slate-100 w-5',
-                innerHTML: svgs.Humid,
-              }),
-              El({
-                element: 'span',
-                className:
-                  'text-left w-16 border-r-2 border-slate-600 dark:border-slate-200',
-                innerText: 'Humid',
-              }),
-              El({
-                element: 'span',
-                className: '',
-                innerText: data.main.humidity,
-              }),
-            ],
-          }),
-        ],
-      }),
-    ],
-  });
-  elem.innerHTML = '';
-  elem.appendChild(details);
+  if (data.cod !== 200) {
+    elem.innerHTML = data.message;
+  } else {
+    const details = El({
+      element: 'div',
+      className: 'w-full flex flex-col items-center gap-2',
+      children: [
+        El({
+          element: 'span',
+          className: 'font-semibold',
+          innerText: data.name + ' , ' + data.sys.country,
+        }),
+        El({
+          element: 'div',
+          className: 'w-full flex items-center justify-center gap-16',
+          children: [
+            svgs[data.weather[0].icon]
+              ? El({
+                  element: 'span',
+                  className:
+                    '[&_svg]:w-24 [&_path]:fill-slate-700 dark:[&_path]:fill-slate-200',
+                  innerHTML: svgs[data.weather[0].icon],
+                })
+              : El({
+                  element: 'img',
+                  className: 'w-16',
+                  src: `https://openweathermap.org/img/w/${data.weather[0].icon}.png`,
+                }),
+            El({
+              element: 'div',
+              className: 'flex flex-col items-center justify-center',
+              children: [
+                El({
+                  element: 'span',
+                  className: 'font-semibold',
+                  innerText: data.weather[0].main,
+                }),
+                El({
+                  element: 'span',
+                  className: 'text-sm',
+                  innerText: data.weather[0].description,
+                }),
+              ],
+            }),
+          ],
+        }),
+        El({
+          element: 'div',
+          className:
+            'w-full bg-transparent border-t border-slate-700 dark:border-slate-200',
+        }),
+        El({
+          element: 'div',
+          className: 'w-full flex items-end justify-center gap-16',
+          children: [
+            El({
+              element: 'div',
+              className: 'flex items-start justify-center',
+              children: [
+                El({
+                  element: 'span',
+                  className: 'text-6xl font-bold',
+                  innerText: parseInt(data.main.temp),
+                }),
+                El({
+                  element: 'span',
+                  className: 'text-lg',
+                  innerText: 'o',
+                }),
+                El({
+                  element: 'span',
+                  className: 'text-4xl',
+                  innerHTML: ' C',
+                }),
+              ],
+            }),
+            El({
+              element: 'span',
+              className: 'text-2xl',
+              innerText:
+                parseInt(data.main.temp_max) +
+                '/' +
+                parseInt(data.main.temp_min),
+            }),
+          ],
+        }),
+        El({
+          element: 'span',
+          className: 'text-lg',
+          innerText: new Date().toDateString(),
+        }),
+        El({
+          element: 'div',
+          className:
+            'w-full bg-transparent border-t border-slate-700 dark:border-slate-200',
+        }),
+        El({
+          element: 'div',
+          className: ' flex flex-col items-start justify-between gap-2',
+          children: [
+            El({
+              element: 'div',
+              className: 'flex items-center justify-between gap-10',
+              children: [
+                El({
+                  element: 'span',
+                  className:
+                    '[&_svg]:w-8 [&_path]:fill-slate-600 dark:[&_path]:fill-slate-100 w-5',
+                  innerHTML: svgs.Wind,
+                }),
+                El({
+                  element: 'span',
+                  className:
+                    ' w-16 border-r-2 border-slate-600 dark:border-slate-200',
+                  innerText: 'Wind',
+                }),
+                El({
+                  element: 'span',
+                  className: '',
+                  innerText: data.wind.speed,
+                }),
+              ],
+            }),
+            El({
+              element: 'div',
+              className: 'flex items-center justify-between gap-10',
+              children: [
+                El({
+                  element: 'span',
+                  className:
+                    '[&_path]:fill-blue-600 dark:[&_path]:fill-slate-100 w-5',
+                  innerHTML: svgs.Humid,
+                }),
+                El({
+                  element: 'span',
+                  className:
+                    'text-left w-16 border-r-2 border-slate-600 dark:border-slate-200',
+                  innerText: 'Humid',
+                }),
+                El({
+                  element: 'span',
+                  className: '',
+                  innerText: data.main.humidity,
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    });
+    elem.innerHTML = '';
+    elem.appendChild(details);
+  }
 };
 const renderHistory = () => {
   const searchHistory =
@@ -300,6 +306,7 @@ const searchHistoryHandler = (e) => {
             element: 'input',
             id: 'search-alt',
             autofocus: true,
+            autocomplete: 'off',
             className:
               'bg-gray-200 bg-opacity-0 text-gray-900 text-md focus:outline-none w-full',
             placeholder: 'search',
@@ -395,6 +402,7 @@ const apiData = (e) => {
   if (e.target.value === '') {
     search.value = '';
     document.getElementById('search-alt').value = '';
+    renderHome();
   }
   apiRequest.setEndPoint(
     `weather?q=${e.target.value}&appid=c2a5e5757bf8e2de367336c584de74bd&units=metric`

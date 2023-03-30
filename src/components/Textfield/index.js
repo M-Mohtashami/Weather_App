@@ -28,6 +28,7 @@ export const Textfield = ({
       El({
         className: `${variants[variant]}`,
         element: 'input',
+        autocomplete: 'off',
         ...inputProps,
       }),
       El({
